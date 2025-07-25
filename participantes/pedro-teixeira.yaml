@@ -2,10 +2,10 @@
 # INSTRUÇÕES PARA O WORKSHOP - SIGA OS 2 PASSOS ABAIXO:
 # ==============================================================================
 
-# PASSO 1: DAR UM NOME ÚNICO AO SEU SITE
-#   - Pressione 'Ctrl+H' (ou 'Cmd+H' no Mac) para abrir a ferramenta "Localizar e Substituir".
+# PASSO 1: DAR UM NOME ÚNICO AO SEU CAMINHO/SITE
+#   - Pressione 'Ctrl+H' para abrir "Localizar e Substituir".
 #   - No campo "Localizar", digite: site-pedroteixeira
-#   - No campo "Substituir", digite um nome único para você (ex: site-pedroteixeira).
+#   - No campo "Substituir", digite um nome único para você (ex: pedro-teixeira).
 #   - Clique em "Substituir Todos".
 
 # PASSO 2: ALTERAR A SUA MENSAGEM
@@ -33,17 +33,36 @@ spec:
         - containerPort: 80
         env:
         - name: HELLO_TEXT
-          value: "Bem-vindo ao Workshop de Kubernetes! Pedro Teixeira"
-
+          value: "Bem-vindo ao Workshop de Kubernetes! Site do Pedro Teixeira"
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: site-pedroteixeira-service
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: site-pedroteixeira
   ports:
   - port: 80
     targetPort: 80
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: site-pedroteixeira-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+      - path: /site-pedroteixeira
+        pathType: Prefix
+        backend:
+          service:
+            name: site-pedroteixeira-service
+            port:
+              number: 80
