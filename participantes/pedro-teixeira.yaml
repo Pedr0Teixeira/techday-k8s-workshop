@@ -1,19 +1,30 @@
-# Este é o modelo para criar seu site no Kubernetes.
-# O participante só precisa se preocupar em alterar a MENSAGEM.
+# ==============================================================================
+# INSTRUÇÕES PARA O WORKSHOP - SIGA OS 2 PASSOS ABAIXO:
+# ==============================================================================
+
+# PASSO 1: DAR UM NOME ÚNICO AO SEU SITE
+#   - Pressione 'Ctrl+H' (ou 'Cmd+H' no Mac) para abrir a ferramenta "Localizar e Substituir".
+#   - No campo "Localizar", digite: site-pedroteixeira
+#   - No campo "Substituir", digite um nome único para você (ex: site-pedroteixeira).
+#   - Clique em "Substituir Todos".
+
+# PASSO 2: ALTERAR A SUA MENSAGEM
+#   - Encontre a linha que começa com "value:" e altere a mensagem.
+# ==============================================================================
 
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: meu-site
+  name: site-pedroteixeira
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: meu-site
+      app: site-pedroteixeira
   template:
     metadata:
       labels:
-        app: meu-site
+        app: site-pedroteixeira
     spec:
       containers:
       - name: web
@@ -22,20 +33,17 @@ spec:
         - containerPort: 80
         env:
         - name: HELLO_TEXT
-          # ================================================================ #
-          # >> ÚNICA LINHA PARA ALTERAR <<
-          # Troque a frase abaixo pela sua mensagem personalizada!
           value: "Bem-vindo ao Workshop de Kubernetes! Pedro Teixeira"
-          # ================================================================ #
+
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: meu-servico
+  name: site-pedroteixeira-service
 spec:
   type: NodePort
   selector:
-    app: meu-site
+    app: site-pedroteixeira
   ports:
   - port: 80
     targetPort: 80
