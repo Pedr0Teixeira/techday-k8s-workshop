@@ -1,45 +1,95 @@
-# Este é o modelo para criar seu site no Kubernetes.
-# Você só precisa se preocupar em alterar a MENSAGEM_CUSTOMIZADA.
+# ==============================================================================
+# INSTRUÇÕES PARA O WORKSHOP - SIGA OS 2 PASSOS ABAIXO:
+# ==============================================================================
 
+# PASSO 1: DAR UM NOME ÚNICO AO SEU SITE
+#   - Pressione 'Ctrl+H' para abrir "Localizar e Substituir".
+#   - No campo "Localizar", digite: NOME-UNICO-AQUI
+#   - No campo "Substituir", digite um nome único para você (ex: pedro-teixeira).
+#   - Clique em "Substituir Todos".
+
+# PASSO 2: ALTERAR A SUA MENSAGEM
+#   - Encontre a linha que começa com "  index.html:" e altere a mensagem.
+#   - Você pode usar tags HTML como <h1> para títulos e <p> para parágrafos!
+#   - Localizados nas linhas 33 e 34
+# ==============================================================================
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: NOME-UNICO-AQUI-config
+data:
+  index.html: |
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>Workshop K8s</title>
+      <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; background-color: #282c34; color: white;}
+        h1 { color: #61dafb; }
+      </style>
+    </head>
+    <body>
+      <h1>Bem-vindo ao Workshop de Kubernetes!</h1>
+      <p>Esta mensagem foi customizada por mim!</p>
+    </body>
+    </html>
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: meu-site
+  name: NOME-UNICO-AQUI
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: meu-site
+      app: NOME-UNICO-AQUI
   template:
     metadata:
       labels:
-        app: meu-site
+        app: NOME-UNICO-AQUI
     spec:
       containers:
       - name: web
-        image: nginxdemos/hello:plain-text
+        image: nginx:latest # Usando a imagem oficial e estável do NGINX
         ports:
         - containerPort: 80
-        env:
-        - name: HELLO_TEXT
-          # ================================================================ #
-          # >> ÚNICA LINHA PARA ALTERAR <<
-          # Troque a frase abaixo pela sua mensagem personalizada!
-          value: "Bem-vindo ao Workshop de Kubernetes!"
-          # ================================================================ #
-
+        volumeMounts: # Monta o nosso arquivo de mensagem dentro do container
+        - name: html-volume
+          mountPath: /usr/share/nginx/html/index.html
+          subPath: index.html
+      volumes: # Define o volume usando o nosso ConfigMap
+      - name: html-volume
+        configMap:
+          name: NOME-UNICO-AQUI-config
 ---
-# Esta parte expõe seu site para que possamos acessá-lo.
-# Não é necessário alterar nada aqui.
-
 apiVersion: v1
 kind: Service
 metadata:
-  name: meu-servico
+  name: NOME-UNICO-AQUI-service
 spec:
-  type: NodePort # Tipo de serviço que expõe a aplicação em uma porta no nó do cluster
+  type: ClusterIP
   selector:
-    app: meu-site
+    app: NOME-UNICO-AQUI
   ports:
   - port: 80
     targetPort: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: NOME-UNICO-AQUI-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+      - path: /NOME-UNICO-AQUI
+        pathType: Prefix
+        backend:
+          service:
+            name: NOME-UNICO-AQUI-service
+            port:
+              number: 80
