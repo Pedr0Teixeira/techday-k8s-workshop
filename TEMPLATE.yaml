@@ -1,0 +1,45 @@
+# Este é o modelo para criar seu site no Kubernetes.
+# Você só precisa se preocupar em alterar a MENSAGEM_CUSTOMIZADA.
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: meu-site
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: meu-site
+  template:
+    metadata:
+      labels:
+        app: meu-site
+    spec:
+      containers:
+      - name: web
+        image: nginxdemos/hello:plain-text
+        ports:
+        - containerPort: 80
+        env:
+        - name: HELLO_TEXT
+          # ================================================================ #
+          # >> ÚNICA LINHA PARA ALTERAR <<
+          # Troque a frase abaixo pela sua mensagem personalizada!
+          value: "Bem-vindo ao Workshop de Kubernetes!"
+          # ================================================================ #
+
+---
+# Esta parte expõe seu site para que possamos acessá-lo.
+# Não é necessário alterar nada aqui.
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: meu-servico
+spec:
+  type: NodePort # Tipo de serviço que expõe a aplicação em uma porta no nó do cluster
+  selector:
+    app: meu-site
+  ports:
+  - port: 80
+    targetPort: 80
