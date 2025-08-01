@@ -4,7 +4,7 @@
 
 # PASSO 1: DAR UM NOME ÚNICO AO SEU SITE
 #   - Pressione 'Ctrl+F' para abrir "Localizar e Substituir".
-#   - No campo "Localizar", digite: nome-unico-aqui
+#   - No campo "Localizar", digite: ana-braga-aqui
 #   - No campo "Substituir", digite um nome único para você.
 #     IMPORTANTE: Use apenas letras minúsculas, números e hífens.
 #     Exemplos válidos: charles-alencar, pedro-teixeira, site-da-ana
@@ -17,7 +17,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: NOME-UNICO-AQUI-config
+  name: ana-braga-AQUI-config
 data:
   index.html: |
     <!DOCTYPE html>
@@ -38,16 +38,16 @@ data:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: NOME-UNICO-AQUI
+  name: ana-braga-AQUI
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: NOME-UNICO-AQUI
+      app: ana-braga-AQUI
   template:
     metadata:
       labels:
-        app: NOME-UNICO-AQUI
+        app: ana-braga-AQUI
     spec:
       containers:
       - name: web
@@ -61,16 +61,16 @@ spec:
       volumes: # Define o volume usando o nosso ConfigMap
       - name: html-volume
         configMap:
-          name: NOME-UNICO-AQUI-config
+          name: ana-braga-AQUI-config
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: NOME-UNICO-AQUI-service
+  name: ana-braga-AQUI-service
 spec:
   type: ClusterIP
   selector:
-    app: NOME-UNICO-AQUI
+    app: ana-braga-AQUI
   ports:
   - port: 80
     targetPort: 80
@@ -78,7 +78,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: NOME-UNICO-AQUI-ingress
+  name: ana-braga-AQUI-ingress
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
@@ -86,10 +86,10 @@ spec:
   rules:
   - http:
       paths:
-      - path: /NOME-UNICO-AQUI
+      - path: /ana-braga-AQUI
         pathType: Prefix
         backend:
           service:
-            name: NOME-UNICO-AQUI-service
+            name: ana-braga-AQUI-service
             port:
               number: 80
