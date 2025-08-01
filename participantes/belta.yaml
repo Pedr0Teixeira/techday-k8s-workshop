@@ -20,20 +20,97 @@ metadata:
   name: belta-config
 data:
   index.html: |
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <title>Workshop K8s</title>
-      <style>
-        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; background-color: #282c34; color: white;}
-        h1 { color: #61dafb; }
-      </style>
-    </head>
-    <body>
-      <h1>Belta!</h1>
-      <p>Esta mensagem foi customizada por mim! na verdade foi não!</p>
-    </body>
-    </html>
+   <!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Superar a Depressão</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f4f8;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #4a90e2;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+        main {
+            padding: 30px;
+            max-width: 800px;
+            margin: auto;
+        }
+        section {
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #4a90e2;
+        }
+        footer {
+            background-color: #e2e2e2;
+            color: #555;
+            text-align: center;
+            padding: 15px;
+            margin-top: 40px;
+        }
+        a {
+            color: #4a90e2;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Superando a Depressão</h1>
+        <p>Informação, apoio e esperança para quem está lutando</p>
+    </header>
+
+    <main>
+        <section>
+            <h2>O que é a depressão?</h2>
+            <p>A depressão é uma condição de saúde mental que afeta milhões de pessoas no mundo todo. Ela vai além da tristeza momentânea e pode impactar profundamente a vida, dificultando atividades diárias, relacionamentos e bem-estar.</p>
+        </section>
+
+        <section>
+            <h2>Passos para a recuperação</h2>
+            <ul>
+                <li><strong>Procure ajuda profissional:</strong> psicólogos e psiquiatras são aliados fundamentais.</li>
+                <li><strong>Converse com alguém:</strong> amigos, familiares ou grupos de apoio podem fazer diferença.</li>
+                <li><strong>Cuide do corpo:</strong> alimentação, exercícios e sono influenciam diretamente a saúde mental.</li>
+                <li><strong>Tenha paciência:</strong> a recuperação é um processo, não um evento.</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Frase de inspiração</h2>
+            <blockquote>
+                “Mesmo que hoje pareça escuro, lembre-se: o sol nasce todos os dias.” 🌅
+            </blockquote>
+        </section>
+
+        <section>
+            <h2>Recursos úteis</h2>
+            <p>
+                • <a href="https://www.cvv.org.br/" target="_blank">CVV – Centro de Valorização da Vida</a><br>
+                • <a href="https://www.saude.gov.br/saude-mental" target="_blank">Ministério da Saúde – Saúde Mental</a><br>
+                • <a href="https://mapasmentais.com.br/" target="_blank">Mapas Mentais sobre Saúde Emocional</a>
+            </p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Superando Juntos. Todos os direitos reservados.</p>
+    </footer>
+</body>
+</html>
 ---
 apiVersion: apps/v1
 kind: Deployment
