@@ -1,0 +1,128 @@
+# ==============================================================================
+# INSTRUÇÕES PARA O WORKSHOP - SIGA OS 2 PASSOS ABAIXO:
+# ==============================================================================
+
+# PASSO 1: DAR UM NOME ÚNICO AO SEU SITE
+#   - Pressione 'Ctrl+F' para abrir "Localizar e Substituir".
+#   - No campo "Localizar", digite: warlley-santos
+#   - No campo "Substituir", digite um nome único para você.
+#     IMPORTANTE: Use apenas letras minúsculas, números e hífens.
+#     Exemplos válidos: charles-alencar, pedro-teixeira, site-da-ana
+#   - Clique em "Substituir Todos".
+
+# PASSO 2: ALTERAR A SUA MENSAGEM
+#   - Encontre a linha que começa com "  index.html:" e altere a mensagem.
+# ==============================================================================
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: warlley-santos-config
+data:
+  index.html: |
+   <!DOCTYPE html>
+    <html lang="en">
+    <head>
+    <meta charset="UTF-8">
+    <title>Workshop K8s</title>
+    <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #f0f8ff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      text-align: center;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(6px);
+    }
+
+    h1 {
+      color: #00bfff;
+      font-size: 3em;
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: #cce7ff;
+      font-size: 1.2em;
+      margin-top: 0;
+    }
+    </style>
+    </head>
+    <body>
+      <div class="container">
+    <h1>Welcome!</h1>
+    <p>Aloha! Welcome to The Jungle!</p>
+      </div>
+      </body>
+    </html>
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: warlley-santos
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: warlley-santos
+  template:
+    metadata:
+      labels:
+        app: warlley-santos
+    spec:
+      containers:
+      - name: web
+        image: nginx:latest # Usando a imagem oficial e estável do NGINX
+        ports:
+        - containerPort: 80
+        volumeMounts: # Monta o nosso arquivo de mensagem dentro do container
+        - name: html-volume
+          mountPath: /usr/share/nginx/html/index.html
+          subPath: index.html
+      volumes: # Define o volume usando o nosso ConfigMap
+      - name: html-volume
+        configMap:
+          name: warlley-santos-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: warlley-santos-service
+spec:
+  type: ClusterIP
+  selector:
+    app: warlley-santos
+  ports:
+  - port: 80
+    targetPort: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: warlley-santos-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+      - path: /warlley-santos
+        pathType: Prefix
+        backend:
+          service:
+            name: warlley-santos-service
+            port:
+              number: 80
