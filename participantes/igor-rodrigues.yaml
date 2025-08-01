@@ -1,0 +1,95 @@
+# ==============================================================================
+# INSTRUÇÕES PARA O WORKSHOP - SIGA OS 2 PASSOS ABAIXO:
+# ==============================================================================
+
+# PASSO 1: DAR UM NOME ÚNICO AO SEU SITE
+#   - Pressione 'Ctrl+F' para abrir "Localizar e Substituir".
+#   - No campo "Localizar", digite: nome-unico-aqui
+#   - No campo "Substituir", digite um nome único para você.
+#     IMPORTANTE: Use apenas letras minúsculas, números e hífens.
+#     Exemplos válidos: charles-alencar, pedro-teixeira, site-da-ana
+#   - Clique em "Substituir Todos".
+
+# PASSO 2: ALTERAR A SUA MENSAGEM
+#   - Encontre a linha que começa com "  index.html:" e altere a mensagem.
+# ==============================================================================
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: NOME-UNICO-AQUI-config
+data:
+  index.html: |
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>Workshop K8s</title>
+      <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; background-color: #282c34; color: white;}
+        h1 { color: #61dafb; }
+      </style>
+    </head>
+    <body>
+      <h1>Bem-vindo ao Workshop de Kubernetes!</h1>
+      <p>Esta mensagem foi customizada por mim!</p>
+    </body>
+    </html>
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: NOME-UNICO-AQUI
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: NOME-UNICO-AQUI
+  template:
+    metadata:
+      labels:
+        app: NOME-UNICO-AQUI
+    spec:
+      containers:
+      - name: web
+        image: nginx:latest # Usando a imagem oficial e estável do NGINX
+        ports:
+        - containerPort: 80
+        volumeMounts: # Monta o nosso arquivo de mensagem dentro do container
+        - name: html-volume
+          mountPath: /usr/share/nginx/html/index.html
+          subPath: index.html
+      volumes: # Define o volume usando o nosso ConfigMap
+      - name: html-volume
+        configMap:
+          name: NOME-UNICO-AQUI-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: NOME-UNICO-AQUI-service
+spec:
+  type: ClusterIP
+  selector:
+    app: NOME-UNICO-AQUI
+  ports:
+  - port: 80
+    targetPort: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: NOME-UNICO-AQUI-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+      - path: /NOME-UNICO-AQUI
+        pathType: Prefix
+        backend:
+          service:
+            name: NOME-UNICO-AQUI-service
+            port:
+              number: 80
