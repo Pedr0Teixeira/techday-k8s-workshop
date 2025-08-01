@@ -32,7 +32,7 @@ data:
     </head>
     <body>
       <h1>Bem-vindo ao Workshop de Kubernetes!</h1>
-      <p>Melinho seu lindo</p>
+      <p>K8s</p>
     </body>
     </html>
 ---
