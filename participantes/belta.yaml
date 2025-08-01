@@ -111,3 +111,62 @@ data:
     </footer>
 </body>
 </html>
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: belta
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: belta
+  template:
+    metadata:
+      labels:
+        app: belta
+    spec:
+      containers:
+      - name: web
+        image: nginx:latest # Usando a imagem oficial e estável do NGINX
+        ports:
+        - containerPort: 80
+        volumeMounts: # Monta o nosso arquivo de mensagem dentro do container
+        - name: html-volume
+          mountPath: /usr/share/nginx/html/index.html
+          subPath: index.html
+      volumes: # Define o volume usando o nosso ConfigMap
+      - name: html-volume
+        configMap:
+          name: belta-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: belta-service
+spec:
+  type: ClusterIP
+  selector:
+    app: belta
+  ports:
+  - port: 80
+    targetPort: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: belta-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+      - path: /belta
+        pathType: Prefix
+        backend:
+          service:
+            name: belta-service
+            port:
+              number: 80
