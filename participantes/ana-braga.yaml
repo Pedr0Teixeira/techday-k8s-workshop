@@ -17,7 +17,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: ana-braga-AQUI-config
+  name: ana-braga-config
 data:
   index.html: |
     <!DOCTYPE html>
@@ -43,11 +43,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: ana-braga-AQUI
+      app: ana-braga
   template:
     metadata:
       labels:
-        app: ana-braga-AQUI
+        app: ana-braga
     spec:
       containers:
       - name: web
@@ -61,16 +61,16 @@ spec:
       volumes: # Define o volume usando o nosso ConfigMap
       - name: html-volume
         configMap:
-          name: ana-braga-AQUI-config
+          name: ana-braga-config
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: ana-braga-AQUI-service
+  name: ana-braga-service
 spec:
   type: ClusterIP
   selector:
-    app: ana-braga-AQUI
+    app: ana-braga
   ports:
   - port: 80
     targetPort: 80
@@ -78,7 +78,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: ana-braga-AQUI-ingress
+  name: ana-braga-ingress
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
@@ -86,7 +86,7 @@ spec:
   rules:
   - http:
       paths:
-      - path: /ana-braga-AQUI
+      - path: /ana-braga
         pathType: Prefix
         backend:
           service:
