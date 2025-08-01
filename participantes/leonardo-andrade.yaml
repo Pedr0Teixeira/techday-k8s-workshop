@@ -4,7 +4,7 @@
 
 # PASSO 1: DAR UM NOME ÚNICO AO SEU SITE
 #   - Pressione 'Ctrl+F' para abrir "Localizar e Substituir".
-#   - No campo "Localizar", digite: nome-unico-aqui
+#   - No campo "Localizar", digite: leonardo-andrade
 #   - No campo "Substituir", digite um nome único para você.
 #     IMPORTANTE: Use apenas letras minúsculas, números e hífens.
 #     Exemplos válidos: charles-alencar, pedro-teixeira, site-da-ana
@@ -17,7 +17,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: NOME-UNICO-AQUI-config
+  name: leonardo-andrade-config
 data:
   index.html: |
     <!DOCTYPE html>
@@ -38,16 +38,16 @@ data:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: NOME-UNICO-AQUI
+  name: leonardo-andrade
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: NOME-UNICO-AQUI
+      app: leonardo-andrade
   template:
     metadata:
       labels:
-        app: NOME-UNICO-AQUI
+        app: leonardo-andrade
     spec:
       containers:
       - name: web
@@ -61,16 +61,16 @@ spec:
       volumes: # Define o volume usando o nosso ConfigMap
       - name: html-volume
         configMap:
-          name: NOME-UNICO-AQUI-config
+          name: leonardo-andrade-config
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: NOME-UNICO-AQUI-service
+  name: leonardo-andrade-service
 spec:
   type: ClusterIP
   selector:
-    app: NOME-UNICO-AQUI
+    app: leonardo-andrade
   ports:
   - port: 80
     targetPort: 80
@@ -78,7 +78,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: NOME-UNICO-AQUI-ingress
+  name: leonardo-andrade-ingress
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
@@ -86,10 +86,10 @@ spec:
   rules:
   - http:
       paths:
-      - path: /NOME-UNICO-AQUI
+      - path: /leonardo-andrade
         pathType: Prefix
         backend:
           service:
-            name: NOME-UNICO-AQUI-service
+            name: leonardo-andrade-service
             port:
               number: 80
